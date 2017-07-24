@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import '../css/ListItem.css';
 
 class ListItem extends Component {
