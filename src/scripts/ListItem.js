@@ -1,16 +1,25 @@
 import React, { Component } from 'react';
 import '../css/ListItem.css';
+import Button from './Button'
 
 class ListItem extends Component {
   render() {
+    const {
+      title,
+      peopleNames
+    } = this.props;
+
+    function onClick() {
+      console.log('add current person to this outing');
+    }
+
     return (
-      <div className="ListItem">
-        <div className="ListItem-header">
-          <h2>Welcome to React</h2>
+      <div className="c-card c-card--accordion u-high">
+        <input type="checkbox" id="accordion-1"/>
+        <label className="c-card__item" htmlFor="accordion-1">{title}</label>
+        <div className="c-card__item">
+          {peopleNames}
         </div>
-        <p className="ListItem-intro">
-          To get started, edit <code>src/ListItem.js</code> and save to reload.
-        </p>
       </div>
     );
   }
