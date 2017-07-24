@@ -1,0 +1,12 @@
+{
+  "manifest_version": 2,
+
+  "name": "Lasso",
+  "description": "Organize coffee outings",
+  "version": "0.0.1",
+
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "index.html"
+  }
+}
