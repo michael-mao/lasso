@@ -1,16 +1,43 @@
-import React, { Component } from 'react';
+import '../css/Button.css';
+import classNames from 'classnames';
+import React, { Component, PropTypes } from 'react';
 
-class Button extends Component {
+export default class Button extends Component {
   render() {
     const {
       title,
-      onClick
+      onClick,
+
+      full,
+      xsm,
+      right,
+
+      rounded,
+      info,
+      success,
+      error,
     } = this.props;
 
+    const classes = classNames('c-button', {
+      'c-button--rounded': rounded,
+      'c-button--ghost-info': info,
+      'c-button--ghost-success': success,
+      'c-button--ghost-error': error,
+      'full': full,
+      'right': right,
+      'u-xsmall': xsm
+    });
+
     return (
-      <button className="c-button" onClick={onClick}>{title}</button>
+      <button className={classes} onClick={onClick}>{title}</button>
     );
   }
-}
+};
 
-export default Button;
+Button.prototypes = {
+  rounded: PropTypes.bool,
+  info: PropTypes.bool,
+  success: PropTypes.bool,
+  error: PropTypes.bool
+};
+
