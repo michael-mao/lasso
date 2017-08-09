@@ -1,5 +1,4 @@
 import '../css/ListItem.css';
-import classNames from 'classnames';
 import React, { Component, PropTypes } from 'react';
 import Button from './Button'
 
@@ -12,13 +11,9 @@ export default class ListItem extends Component {
       onClick
     } = this.props;
 
-    const classes = classNames('', {
-      'right': right
-    });
-
-    const people = peopleNames.map(function(name) {
-      return <li className="c-list__item">name</li>;
-    });
+    const people = peopleNames.map((name, index) =>
+      <li key={index} className="c-list__item">name</li>
+    );
 
     return (
       <div className="c-card c-card--accordion u-high">

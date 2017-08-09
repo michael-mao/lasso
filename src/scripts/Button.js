@@ -35,6 +35,13 @@ export default class Button extends Component {
 };
 
 Button.prototypes = {
+  title: PropTypes.string,
+  onClick: PropTypes.function,
+
+  full: PropTypes.bool,
+  xsm: PropTypes.bool,
+  right: PropTypes.bool,
+
   rounded: PropTypes.bool,
   info: PropTypes.bool,
   success: PropTypes.bool,
