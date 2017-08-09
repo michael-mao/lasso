@@ -1,5 +1,6 @@
 import * as firebase from 'firebase';
 import React, { Component } from 'react';
+import Button from './Button';
 import ListItem from './ListItem';
 import '../css/App.css';
 
@@ -9,7 +10,6 @@ class App extends Component {
 
     // Initialize Firebase
     var config = {
-
     };
     firebase.initializeApp(config);
 
@@ -24,7 +24,11 @@ class App extends Component {
     var a = ['a','b'];
     return (
       <div className="App">
-        <ListItem title='test' peopleNames={a}/>
+        <h3 className="c-heading u-centered">Wed Oct 24</h3>
+        <ListItem title='test' peopleNames={a} right="true"/>
+        <div>
+          <Button full="true" success="true" title="CREATE" />
+        </div>
       </div>
     );
   }
