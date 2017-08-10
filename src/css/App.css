@@ -1,3 +1,14 @@
 .App {
   background-color: #fff;
 }
+
+.text-input {
+  width: 70%;
+  margin: 0px 10px 0px 10px;
+  height: 30px;
+  font-size: .83em;
+}
+
+.section {
+  margin: 10px 0px 10px 0px;
+}

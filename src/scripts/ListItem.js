@@ -1,6 +1,6 @@
 import '../css/ListItem.css';
 import React, { Component, PropTypes } from 'react';
-import Button from './Button'
+import Button from './Button';
 
 export default class ListItem extends Component {
   render() {
