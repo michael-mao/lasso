@@ -12,9 +12,9 @@ export default class ListItem extends Component {
       onClick
     } = this.props;
 
-    const people = peopleNames.map(function(name, index) {
+    const people = peopleNames ? peopleNames.map(function(name, index) {
       return <li key={index} className="c-list__item">{name}</li>;
-    });
+    }) : '';
 
     return (
       <div className="c-card c-card--accordion u-high">

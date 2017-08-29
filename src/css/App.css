@@ -3,7 +3,7 @@
 }
 
 .text-input {
-  width: 70%;
+  width: 92%;
   margin: 0px 10px 0px 10px;
   height: 30px;
   font-size: .83em;
@@ -11,4 +11,7 @@
 
 .section {
   margin: 10px 0px 10px 0px;
+}
+.padded-section {
+  padding: 10px 10px 0px 10px;
 }

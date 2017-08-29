@@ -7,6 +7,8 @@ export default class Button extends Component {
     const {
       title,
       onClick,
+      type,
+      value,
 
       full,
       xsm,
@@ -29,7 +31,7 @@ export default class Button extends Component {
     });
 
     return (
-      <button className={classes} onClick={onClick}>{title}</button>
+      <button type={type} value={value} className={classes} onClick={onClick}>{title}</button>
     );
   }
 };
@@ -37,6 +39,8 @@ export default class Button extends Component {
 Button.prototypes = {
   title: PropTypes.string,
   onClick: PropTypes.function,
+  type: PropTypes.string,
+  value: PropTypes.string,
 
   full: PropTypes.bool,
   xsm: PropTypes.bool,
