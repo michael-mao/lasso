@@ -33,6 +33,17 @@ class App extends Component {
       messagingSenderId: "279090645839"
     };
     firebase.initializeApp(config);
+
+    firebase.auth().onAuthStateChanged(user => {
+      if (user && user.email) {
+        this.setState({
+          userEmail: user.email,
+          stage: STAGE.LIST
+        });
+      } else {
+        console.log('No user');
+      }
+    });
   }
 
   componentWillMount() {
