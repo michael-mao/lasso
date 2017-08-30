@@ -132,7 +132,7 @@ class App extends Component {
     });
     outings[index].participants.push(this.state.userEmail);
     let updates = {
-      [`/outings/${id}`]: outings
+      [`/outings/${id}/participants`]: outings[index].participants
     };
     database.ref().update(updates);
     this.setState({'outings': outings});
@@ -143,7 +143,7 @@ class App extends Component {
       return <ListItem id={outing.id}
                        key={outing.id}
                        title={`${outing.name} at ${outing.time}`}
-                       peopleNames={outing.people}
+                       peopleNames={outing.participants}
                        right="true"
                        onClick={() => this.addParticipant(outing.id)}/>;
     });
