@@ -33,12 +33,6 @@ class App extends Component {
       messagingSenderId: "279090645839"
     };
     firebase.initializeApp(config);
-
-    firebase.auth().signInAnonymously().catch(error => {
-      let errorCode = error.code;
-      let errorMessage = error.message;
-      console.log('ERROR:', errorCode, errorMessage);
-    });
   }
 
   componentWillMount() {
@@ -98,10 +92,25 @@ class App extends Component {
 
   handleLogin(event) {
     event.preventDefault();
-    console.log(this.state.userEmail, this.state.userPassword);
+    let email = this.state.userEmail;
+    let password = this.state.userPassword;
 
-    this.setState({
-      stage: STAGE.LIST
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(() => {
+        this.setState({
+          stage: STAGE.LIST
+        });
+      })
+      .catch(error => {
+        let errorCode = error.code;
+        let errorMessage = error.message;
+
+        // if user does not exist, create new user
+        if (errorCode === 'auth/user-not-found') {
+          firebase.auth().createUserWithEmailAndPassword(email, password)
+        } else {
+          console.log('Invalid login');
+        }
     });
   }
 
