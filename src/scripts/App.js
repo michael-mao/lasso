@@ -74,17 +74,14 @@ class App extends Component {
     this.setState({ stage: STAGE.CREATE });
   };
 
-  writeUserData(name, time) {
+  handleSubmit(event) {
     let database = firebase.database();
     let outingsRef = database.ref('outings/');
     outingsRef.push({
-      name: name.trim(),
-      time: time
+      name: this.state.outingName.trim(),
+      time: this.state.outingTime,
+      participants: [this.state.userEmail]
     });
-  };
-
-  handleSubmit(event) {
-    this.writeUserData(this.state.outingName, this.state.outingTime);
     this.setState({
       stage: STAGE.LIST
     });
@@ -125,13 +122,30 @@ class App extends Component {
     });
   }
 
+  addParticipant(id) {
+    let database = firebase.database();
+    let outings = this.state.outings;
+    let index = outings.findIndex(outing => {
+      if (outing.id === id) {
+        return outing;
+      }
+    });
+    outings[index].participants.push(this.state.userEmail);
+    let updates = {
+      [`/outings/${id}`]: outings
+    };
+    database.ref().update(updates);
+    this.setState({'outings': outings});
+  }
+
   render() {
     const outingItems = this.state.outings.map(outing => {
       return <ListItem id={outing.id}
                        key={outing.id}
                        title={`${outing.name} at ${outing.time}`}
                        peopleNames={outing.people}
-                       right="true"/>;
+                       right="true"
+                       onClick={() => this.addParticipant(outing.id)}/>;
     });
 
     return (
