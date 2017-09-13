@@ -147,10 +147,12 @@ class App extends Component {
                        right="true"
                        onClick={() => this.addParticipant(outing.id)}/>;
     });
+    // date string without year
+    const dateString = new Date().toDateString().slice(0, -5);
 
     return (
       <div className="App">
-        <h3 className="c-heading u-centered">Wed Oct 24</h3>
+        <h3 className="c-heading u-centered">Today is {dateString}</h3>
 
         { this.state.stage === STAGE.LOGIN
             ? <form onSubmit={this.handleLogin}>
