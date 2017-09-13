@@ -5,3 +5,10 @@
 .right {
   float: right;
 }
+
+.outing-join-button,
+.outing-leave-button {
+  width: 25%;
+  padding: 2px 6px 3px;
+  float: right;
+}

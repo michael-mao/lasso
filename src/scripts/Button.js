@@ -18,17 +18,18 @@ export default class Button extends Component {
       info,
       success,
       error,
+      customClasses
     } = this.props;
 
     const classes = classNames('c-button', {
       'c-button--rounded': rounded,
-      'c-button--ghost-info': info,
-      'c-button--ghost-success': success,
-      'c-button--ghost-error': error,
+      'c-button--info': info,
+      'c-button--success': success,
+      'c-button--error': error,
       'full': full,
       'right': right,
       'u-xsmall': xsm
-    });
+    }, customClasses);
 
     return (
       <button type={type} value={value} className={classes} onClick={onClick}>{title}</button>
@@ -49,6 +50,7 @@ Button.prototypes = {
   rounded: PropTypes.bool,
   info: PropTypes.bool,
   success: PropTypes.bool,
-  error: PropTypes.bool
+  error: PropTypes.bool,
+  customClasses: PropTypes.array
 };
 

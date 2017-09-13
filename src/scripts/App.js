@@ -138,6 +138,23 @@ class App extends Component {
     this.setState({'outings': outings});
   }
 
+  removeParticipant(id) {
+    let database = firebase.database();
+    let outings = this.state.outings;
+    let index = outings.findIndex(outing => {
+      if (outing.id === id) {
+        return outing;
+      }
+    });
+    let indexParticipant = outings[index].participants.indexOf(this.state.userEmail);
+    outings[index].participants.splice(indexParticipant, 1);
+    let updates = {
+      [`/outings/${id}/participants`]: outings[index].participants
+    };
+    database.ref().update(updates);
+    this.setState({'outings': outings});
+  }
+
   render() {
     const outingItems = this.state.outings.map(outing => {
       return <ListItem id={outing.id}
@@ -145,8 +162,9 @@ class App extends Component {
                        title={`${outing.name} at ${outing.time}`}
                        right="true"
                        peopleNames={outing.participants}
-                       hideJoinButton={outing.participants.includes(this.state.userEmail)}
-                       onClickJoin={() => this.addParticipant(outing.id)}/>;
+                       outingJoined={outing.participants.includes(this.state.userEmail)}
+                       onClickJoin={() => this.addParticipant(outing.id)}
+                       onClickLeave={() => this.removeParticipant(outing.id)}/>;
     });
     // date string without year
     const dateString = new Date().toDateString().slice(0, -5);
