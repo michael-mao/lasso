@@ -25,7 +25,7 @@ export default class ListItem extends Component {
           {title}
           {outingJoined
             ? <Button customClasses="outing-leave-button" xsm="true" title="LEAVE" error="true" onClick={onClickLeave}/>
-            : <Button customClasses="outing-join-button" xsm="true" title="JOIN" success="true" onClick={onClickJoin}/>
+            : <Button customClasses="outing-join-button" xsm="true" title="JOIN" info="true" onClick={onClickJoin}/>
           }
         </label>
 
