@@ -143,9 +143,10 @@ class App extends Component {
       return <ListItem id={outing.id}
                        key={outing.id}
                        title={`${outing.name} at ${outing.time}`}
-                       peopleNames={outing.participants}
                        right="true"
-                       onClick={() => this.addParticipant(outing.id)}/>;
+                       peopleNames={outing.participants}
+                       hideJoinButton={outing.participants.includes(this.state.userEmail)}
+                       onClickJoin={() => this.addParticipant(outing.id)}/>;
     });
     // date string without year
     const dateString = new Date().toDateString().slice(0, -5);

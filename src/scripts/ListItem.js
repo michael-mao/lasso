@@ -9,7 +9,8 @@ export default class ListItem extends Component {
       title,
       right,
       peopleNames,
-      onClick
+      hideJoinButton,
+      onClickJoin
     } = this.props;
 
     const people = peopleNames ? peopleNames.map(function(name, index) {
@@ -21,7 +22,7 @@ export default class ListItem extends Component {
         <input type="checkbox" id={id} />
         <label className="c-card__item" htmlFor={id}>
           {title}
-          <Button right={right} xsm="true" title="+" info="true" rounded="true" onClick={onClick}/>
+          {hideJoinButton ? null : <Button right={right} xsm="true" title="+" info="true" rounded="true" onClick={onClickJoin}/>}
         </label>
 
         <div className="c-card__item">
