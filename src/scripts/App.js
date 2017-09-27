@@ -15,13 +15,15 @@ class App extends Component {
       stage: STAGE.LOGIN,
       outingName: '',
       outingTime: '',
+      outingNameError: '',
+      outingTimeError: '',
       userEmail: '',
       userPassword: ''
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
-    this.toggleCreateForm = this.toggleCreateForm.bind(this);
+    this.setStage = this.setStage.bind(this);
 
     // Initialize Firebase
     let config = {
@@ -70,20 +72,45 @@ class App extends Component {
     firebase.database().off();
   }
 
-  toggleCreateForm() {
-    this.setState({ stage: STAGE.CREATE });
+  setStage(stage) {
+    this.setState({ stage: stage });
   };
 
   handleSubmit(event) {
+    let outingName = this.state.outingName.trim();
+
+    if (outingName.length === 0) {
+      this.setState({
+        outingNameError: 'Name is required'
+      });
+      event.preventDefault();
+      return;
+    } else if (this.state.outings.find(outing => outing.name === outingName)) {
+      this.setState({
+        outingNameError: 'Name already exists'
+      });
+      event.preventDefault();
+      return;
+    } else if (this.state.outingTime.length === 0) {
+      this.setState({
+        outingTimeError: 'Time is required'
+      });
+      event.preventDefault();
+      return;
+    }
     let database = firebase.database();
     let outingsRef = database.ref('outings/');
     outingsRef.push({
-      name: this.state.outingName.trim(),
+      name: outingName,
       time: this.state.outingTime,
       participants: [this.state.userEmail]
     });
     this.setState({
-      stage: STAGE.LIST
+      stage: STAGE.LIST,
+      outingName: '',
+      outingTime: '',
+      outingNameError: '',
+      outingTimeError: ''
     });
     event.preventDefault();
   };
@@ -162,7 +189,7 @@ class App extends Component {
                        title={`${outing.name} at ${outing.time}`}
                        right="true"
                        peopleNames={outing.participants}
-                       outingJoined={outing.participants.includes(this.state.userEmail)}
+                       outingJoined={outing.participants && outing.participants.includes(this.state.userEmail)}
                        onClickJoin={() => this.addParticipant(outing.id)}
                        onClickLeave={() => this.removeParticipant(outing.id)}/>;
     });
@@ -197,16 +224,25 @@ class App extends Component {
             ? <div className="section">
                 <form onSubmit={this.handleSubmit}>
                   <input type="text" name="outingName" value={this.state.outingName} onChange={this.handleInputChange} className="text-input" placeholder="Outing Name" />
+                  { this.state.outingNameError !== ''
+                      ? <small className="error">{this.state.outingNameError}</small>
+                      : false
+                  }
                   <input type="time" name="outingTime" value={this.state.outingTime} onChange={this.handleInputChange} className="text-input" />
+                  { this.state.outingTimeError !== ''
+                      ? <small className="error">{this.state.outingTimeError}</small>
+                      : false
+                  }
                   <div className="padded-section">
                     <Button full="true" className="text-input" success="true" title="OK" type="submit" />
+                    <Button full="true" title="CANCEL" onClick={() => this.setStage(STAGE.LIST)} />
                   </div>
                 </form>
               </div>
             : <div>
                 {outingItems}
                 <div className="section">
-                  <Button full="true" success="true" title="CREATE" onClick={this.toggleCreateForm} />
+                  <Button full="true" success="true" title="CREATE" onClick={() => this.setStage(STAGE.CREATE)} />
                 </div>
               </div>
         }

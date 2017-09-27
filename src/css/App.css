@@ -15,3 +15,9 @@
 .padded-section {
   padding: 10px 10px 0px 10px;
 }
+
+small.error {
+  padding-left: 10px;
+  color: #f44336;
+  font-size: 12px;
+}
