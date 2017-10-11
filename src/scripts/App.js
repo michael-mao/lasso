@@ -10,6 +10,7 @@ const STAGE = Object.freeze({LOGIN: 1, LIST: 2, CREATE: 3});
 class App extends Component {
   constructor(props) {
     super(props);
+    this.chrome = this.props.chrome;
     this.state = {
       outings: [],
       stage: STAGE.LOGIN,
@@ -63,6 +64,9 @@ class App extends Component {
       });
       this.setState({
         outings: outings
+      });
+      this.chrome.storage.sync.set({outings: outings}, (data) => {
+        console.log('saved outings to local storage');
       });
     });
   }

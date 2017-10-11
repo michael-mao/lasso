@@ -5,10 +5,19 @@
   "description": "Organize coffee outings",
   "version": "0.0.1",
 
+  "background": {
+    "scripts": ["background.js"]
+  },
   "browser_action": {
     "default_icon": "icon.png",
     "default_popup": "index.html"
   },
+  "permissions": [
+    "identity",
+    "alarms",
+    "notifications",
+    "storage"
+  ],
 
   "content_security_policy": "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'"
 }
