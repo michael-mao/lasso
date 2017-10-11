@@ -1,5 +1,7 @@
 import * as firebase from 'firebase';
 import React, { Component } from 'react';
+import PlacesAutocomplete from 'react-places-autocomplete'
+
 
 import Button from './Button';
 import ListItem from './ListItem';
@@ -19,12 +21,15 @@ class App extends Component {
       outingNameError: '',
       outingTimeError: '',
       userEmail: '',
-      userPassword: ''
+      userPassword: '',
+      address: ''
     };
+    this.onLocationChange = this.onLocationChange.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
     this.setStage = this.setStage.bind(this);
+    this.timeStringToDate = this.timeStringToDate.bind(this);
 
     // Initialize Firebase
     let config = {
@@ -88,17 +93,23 @@ class App extends Component {
     this.setState({ stage: stage });
   };
 
-  handleSubmit(event) {
-    let outingName = this.state.outingName.trim();
+  // timeString - format of '15:00'
+  timeStringToDate(timeString) {
     var now = new Date();
+    return new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      timeString.substr(0, 2),
+      timeString.substr(3, 5)
+    );
+  }
+  
+  handleSubmit(event) {
+    var now = new Date();
+    let outingName = this.state.outingName.trim();
     var outingTime = this.state.outingTime.length > 0
-      ? new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          now.getDate(),
-          this.state.outingTime.substr(0, 2),
-          this.state.outingTime.substr(3, 5)
-        )
+      ? this.timeStringToDate(this.state.outingTime)
       : false;
 
     if (outingName.length === 0) {
@@ -131,6 +142,7 @@ class App extends Component {
     outingsRef.push({
       name: outingName,
       time: this.state.outingTime,
+      location: this.state.address,
       participants: [this.state.userEmail]
     });
     this.setState({
@@ -142,6 +154,10 @@ class App extends Component {
     });
     event.preventDefault();
   };
+
+  onLocationChange(address) {
+    this.setState({ address });
+  }
 
   handleInputChange(event) {
     const target = event.target;
@@ -214,13 +230,18 @@ class App extends Component {
     const outingItems = this.state.outings.map(outing => {
       return <ListItem id={outing.id}
                        key={outing.id}
-                       title={`${outing.name} at ${outing.time}`}
+                       title={`${outing.name} at ${this.timeStringToDate(outing.time).toLocaleTimeString()}`}
                        right="true"
                        peopleNames={outing.participants}
                        outingJoined={outing.participants && outing.participants.includes(this.state.userEmail)}
                        onClickJoin={() => this.addParticipant(outing.id)}
                        onClickLeave={() => this.removeParticipant(outing.id)}/>;
     });
+    const inputProps = {
+      value: this.state.address,
+      onChange: this.onLocationChange,
+    }
+
     // date string without year
     const dateString = new Date().toDateString().slice(0, -5);
 
@@ -261,7 +282,8 @@ class App extends Component {
                   { this.state.outingTimeError !== ''
                       ? <small className="error">{this.state.outingTimeError}</small>
                       : false
-                  }
+                    }
+                  <div className="text-input"><PlacesAutocomplete inputProps={inputProps} /></div>
                   <div className="padded-section">
                     <Button full="true" className="text-input" success="true" title="OK" type="submit" />
                     <Button full="true" title="CANCEL" onClick={() => this.setStage(STAGE.LIST)} />
