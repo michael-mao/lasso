@@ -72,12 +72,30 @@ class App extends Component {
     firebase.database().off();
   }
 
+  componentDidMount() {
+    setInterval(() => {
+      this.setState({
+        timeString : new Date().toLocaleTimeString()
+      })
+    }, 1000);
+  }
+
   setStage(stage) {
     this.setState({ stage: stage });
   };
 
   handleSubmit(event) {
     let outingName = this.state.outingName.trim();
+    var now = new Date();
+    var outingTime = this.state.outingTime.length > 0
+      ? new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+          this.state.outingTime.substr(0, 2),
+          this.state.outingTime.substr(3, 5)
+        )
+      : false;
 
     if (outingName.length === 0) {
       this.setState({
@@ -94,6 +112,12 @@ class App extends Component {
     } else if (this.state.outingTime.length === 0) {
       this.setState({
         outingTimeError: 'Time is required'
+      });
+      event.preventDefault();
+      return;
+    } else if (outingTime < now) {
+      this.setState({
+        outingTimeError: 'Time should be in the future'
       });
       event.preventDefault();
       return;
@@ -199,6 +223,7 @@ class App extends Component {
     return (
       <div className="App">
         <h3 className="c-heading u-centered">Today is {dateString}</h3>
+        <h4 className="u-centered">{this.state.timeString}</h4>
 
         { this.state.stage === STAGE.LOGIN
             ? <form onSubmit={this.handleLogin}>
