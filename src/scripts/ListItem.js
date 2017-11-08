@@ -7,7 +7,6 @@ export default class ListItem extends Component {
     const {
       id,
       title,
-      right,
       peopleNames,
       outingJoined,
       onClickJoin,
@@ -42,7 +41,6 @@ export default class ListItem extends Component {
 ListItem.prototypes = {
   id: PropTypes.string,
   title: PropTypes.string,
-  right: PropTypes.bool,
   peopleNames: PropTypes.object,
   outingJoined: PropTypes.bool,
   onClickJoin: PropTypes.function,

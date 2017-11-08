@@ -104,7 +104,7 @@ class App extends Component {
       timeString.substr(3, 5)
     );
   }
-  
+
   handleSubmit(event) {
     var now = new Date();
     let outingName = this.state.outingName.trim();
@@ -230,8 +230,7 @@ class App extends Component {
     const outingItems = this.state.outings.map(outing => {
       return <ListItem id={outing.id}
                        key={outing.id}
-                       title={`${outing.name} at ${this.timeStringToDate(outing.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`}
-                       right="true"
+                       title={`${outing.name} at ${this.timeStringToDate(outing.time).toLocaleTimeString()}`}
                        peopleNames={outing.participants}
                        outingJoined={outing.participants && outing.participants.includes(this.state.userEmail)}
                        onClickJoin={() => this.addParticipant(outing.id)}
