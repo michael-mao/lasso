@@ -84,7 +84,7 @@ class App extends Component {
   componentDidMount() {
     setInterval(() => {
       this.setState({
-        timeString : new Date().toLocaleTimeString()
+        timeString : new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
       })
     }, 1000);
   }
@@ -230,7 +230,7 @@ class App extends Component {
     const outingItems = this.state.outings.map(outing => {
       return <ListItem id={outing.id}
                        key={outing.id}
-                       title={`${outing.name} at ${this.timeStringToDate(outing.time).toLocaleTimeString()}`}
+                       title={`${outing.name} at ${this.timeStringToDate(outing.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`}
                        right="true"
                        peopleNames={outing.participants}
                        outingJoined={outing.participants && outing.participants.includes(this.state.userEmail)}
