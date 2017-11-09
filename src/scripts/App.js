@@ -246,6 +246,19 @@ class App extends Component {
     })
   }
 
+  removeOuting(id) {
+    let outings = this.state.outings;
+    let index = outings.findIndex(outing => {
+      if (outing.id === id) {
+        return outing;
+      }
+    });
+    firebase.database().ref(`outings/${id}`).remove()
+    this.setStage(STAGE.LIST)
+    outings.splice(index, 1)
+    this.setState({'outings': outings});
+  }
+
   render() {
     const outingItems = this.state.outings.map(outing => {
       return <div onClick={() => this.getOutingDetail(outing.id)}>
@@ -323,6 +336,7 @@ class App extends Component {
             : this.state.stage === STAGE.DETAIL
             ? <div className="padded-section">
                 <Button xsm="true" success="true" title="Back" onClick={() => this.setStage(STAGE.LIST)} />
+                <Button xsm="true" error="true" title="X" onClick={() => this.removeOuting(this.state.outingDetail.id)} />
                 <h4>Participants</h4>
                 <ul>
                   {people}
