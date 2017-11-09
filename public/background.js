@@ -13,12 +13,17 @@ function init() {
       outings.forEach(function(outing) {
         outingTime = getTimeStamp(outing.time);
         timeUntilOuting = outingTime - now;
-        if (timeUntilOuting >= 0 && timeUntilOuting <= 600000) { // 10 min
+        if (timeUntilOuting >= 0 && timeUntilOuting <= 600000 && !outing.reminderSent) { // 10 min
           upcomingOutings.push(outing.name);
+          outing.reminderSent = true;
+          chrome.runtime.sendMessage({message: 'updateOuting', data: outing}, function(response) {
+            console.log(response);
+          });
         }
       });
 
       if (upcomingOutings.length) {
+        // TODO: improve to send one reminder for all outings at same time
         upcomingOutings.forEach(function(outingName) {
           sendOutingReminder(outingName);
         });
@@ -35,7 +40,7 @@ function init() {
 function sendOutingReminder(outingName) {
   chrome.notifications.clear('outingReminder');
   console.log('cleared notification');
-  
+
   chrome.notifications.create('outingReminder', {
     type: 'basic',
     iconUrl: 'icon.png',

@@ -58,7 +58,7 @@ class App extends Component {
     let database = firebase.database();
     let outingsRef = database.ref('outings/');
 
-    // listen for changes
+    // listen for changes from firebase
     outingsRef.on('value', snapshot => {
       let outings = [];
       let data;
@@ -73,6 +73,15 @@ class App extends Component {
       this.chrome.storage.sync.set({outings: outings}, (data) => {
         console.log('saved outings to local storage');
       });
+    });
+
+    // listen for changes locally
+    this.chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      if (request.message === 'updateOuting') {
+        let updateData = {};
+        updateData['outings/' + request.data.id] = request.data;
+        firebase.database().ref().update(updateData);
+      }
     });
   }
 
@@ -137,13 +146,15 @@ class App extends Component {
       event.preventDefault();
       return;
     }
+
     let database = firebase.database();
     let outingsRef = database.ref('outings/');
     outingsRef.push({
       name: outingName,
       time: this.state.outingTime,
       location: this.state.address,
-      participants: [this.state.userEmail]
+      participants: [this.state.userEmail],
+      reminderSent: false
     });
     this.setState({
       stage: STAGE.LIST,
