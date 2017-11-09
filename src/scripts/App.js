@@ -7,7 +7,7 @@ import Button from './Button';
 import ListItem from './ListItem';
 import '../css/App.css';
 
-const STAGE = Object.freeze({LOGIN: 1, LIST: 2, CREATE: 3});
+const STAGE = Object.freeze({LOGIN: 1, LIST: 2, CREATE: 3, DETAIL: 4});
 
 class App extends Component {
   constructor(props) {
@@ -226,16 +226,27 @@ class App extends Component {
     this.setState({'outings': outings});
   }
 
+  getOutingDetail(id) {
+    this.state.outings.findIndex(outing => {
+      if (outing.id === id) {
+        this.setStage(STAGE.DETAIL)
+        this.setState({'outingDetail': outing});
+      }
+    })
+  }
+
   render() {
     const outingItems = this.state.outings.map(outing => {
-      return <ListItem id={outing.id}
-                       key={outing.id}
-                       title={`${outing.name} at ${this.timeStringToDate(outing.time).toLocaleTimeString()}`}
-                       peopleNames={outing.participants}
-                       outingJoined={outing.participants && outing.participants.includes(this.state.userEmail)}
-                       onClickJoin={() => this.addParticipant(outing.id)}
-                       onClickLeave={() => this.removeParticipant(outing.id)}/>;
+      return <div onClick={() => this.getOutingDetail(outing.id)}>
+                <ListItem title={`${outing.name} at ${this.timeStringToDate(outing.time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`}
+                          description={outing.location}
+                          disabled={false}
+                          outingJoined={outing.participants && outing.participants.includes(this.state.userEmail)}
+                          onClickJoin={() => this.addParticipant(outing.id)}
+                          onClickLeave={() => this.removeParticipant(outing.id)}/>
+            </div>;
     });
+
     const inputProps = {
       value: this.state.address,
       onChange: this.onLocationChange,
@@ -244,10 +255,19 @@ class App extends Component {
     // date string without year
     const dateString = new Date().toDateString().slice(0, -5);
 
+     const people = this.state.outingDetail ? this.state.outingDetail.participants.map(function(name, index) {
+      return <li>{name}</li>;
+    }) : '';
+
     return (
       <div className="App">
-        <h3 className="c-heading u-centered">Today is {dateString}</h3>
-        <h4 className="u-centered">{this.state.timeString}</h4>
+        { this.state.stage != STAGE.DETAIL
+          ? <div>
+              <h3 className="c-heading u-centered">Today is {dateString}</h3>
+              <p className="u-centered">{this.state.timeString}</p>
+            </div>
+          : false
+        }
 
         { this.state.stage === STAGE.LOGIN
             ? <form onSubmit={this.handleLogin}>
@@ -289,8 +309,18 @@ class App extends Component {
                   </div>
                 </form>
               </div>
+            : this.state.stage === STAGE.DETAIL
+            ? <div className="padded-section">
+                <Button xsm="true" success="true" title="Back" onClick={() => this.setStage(STAGE.LIST)} />
+                <h4>Participants</h4>
+                <ul>
+                  {people}
+                </ul>
+              </div>
             : <div>
-                {outingItems}
+                <ul className="c-card c-card--menu u-high">
+                  {outingItems}
+                </ul>
                 <div className="section">
                   <Button full="true" success="true" title="CREATE" onClick={() => this.setStage(STAGE.CREATE)} />
                 </div>

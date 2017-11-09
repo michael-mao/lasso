@@ -12,6 +12,9 @@
 .section {
   margin: 10px 0px 10px 0px;
 }
+ul {
+  list-style: none;
+}
 .padded-section {
   padding: 10px 10px 0px 10px;
 }
